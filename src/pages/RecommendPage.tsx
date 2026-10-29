@@ -48,8 +48,26 @@ const [form, setForm] = useState<SoilInput>({
   };
 
   const soilTypes = ["Clay", "Sandy", "Silt", "Loamy"] as const;
-const cropTypes = ["Wheat", "Rice", "Maize", "Cotton", "Sugarcane", "Potato", "Tomato"] as const;
-const seasons = ["Kharif", "Rabi", "Zaid"] as const;
+  const cropTypes = ["Wheat", "Rice", "Maize", "Cotton", "Sugarcane", "Potato", "Tomato"] as const;
+  const seasons = ["Kharif", "Rabi", "Zaid"] as const;
+
+  const getSoilLabel = (s: string) => {
+    const key = s.toLowerCase() === "loamy" ? "loam" : s.toLowerCase();
+    const res = t(`recommend.soilTypes.${key}`);
+    return res && !res.startsWith("recommend.") ? res : s;
+  };
+
+  const getCropLabel = (c: string) => {
+    const key = c.toLowerCase();
+    const res = t(`recommend.cropTypes.${key}`);
+    return res && !res.startsWith("recommend.") ? res : c;
+  };
+
+  const getSeasonLabel = (season: string) => {
+    const key = season.toLowerCase();
+    const res = t(`recommend.seasons.${key}`);
+    return res && !res.startsWith("recommend.") ? res : season;
+  };
 
   const getNutrientColor = (value: number, optimal: number) => {
     const ratio = value / optimal;
@@ -139,18 +157,22 @@ const seasons = ["Kharif", "Rabi", "Zaid"] as const;
               <div className="space-y-2">
                 <Label className="text-sm font-semibold text-foreground">{t("recommend.soilType")}</Label>
                 <Select value={form.soilType} onValueChange={(v) => updateForm("soilType", v)}>
-                  <SelectTrigger className="h-14 text-base"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-14 text-base">
+                    <SelectValue>{getSoilLabel(form.soilType)}</SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
-                    {soilTypes.map((s) => <SelectItem key={s} value={s}>{t(`recommend.soilTypes.${s}`)}</SelectItem>)}
+                    {soilTypes.map((s) => <SelectItem key={s} value={s}>{getSoilLabel(s)}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-semibold text-foreground">{t("recommend.cropType")}</Label>
                 <Select value={form.cropType} onValueChange={(v) => updateForm("cropType", v)}>
-                  <SelectTrigger className="h-14 text-base"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-14 text-base">
+                    <SelectValue>{getCropLabel(form.cropType)}</SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
-                    {cropTypes.map((c) => <SelectItem key={c} value={c}>{t(`recommend.cropTypes.${c}`)}</SelectItem>)}
+                    {cropTypes.map((c) => <SelectItem key={c} value={c}>{getCropLabel(c)}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -202,9 +224,11 @@ const seasons = ["Kharif", "Rabi", "Zaid"] as const;
               <div className="space-y-2">
                 <Label className="text-sm font-semibold text-foreground">{t("recommend.season")}</Label>
                 <Select value={form.season} onValueChange={(v) => updateForm("season", v)}>
-                  <SelectTrigger className="h-14 text-base"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-14 text-base">
+                    <SelectValue>{getSeasonLabel(form.season)}</SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
-                    {seasons.map((s) => <SelectItem key={s} value={s}>{t(`recommend.seasons.${s}`)}</SelectItem>)}
+                    {seasons.map((s) => <SelectItem key={s} value={s}>{getSeasonLabel(s)}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
