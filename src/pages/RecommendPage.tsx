@@ -20,6 +20,8 @@ type BackendPrediction = {
   confidence: number | null;
 };
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
+
 export default function RecommendPage() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -62,7 +64,7 @@ const seasons = ["Kharif", "Rabi", "Zaid"] as const;
     setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/predict", {
+      const response = await fetch(`${API_BASE_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
